@@ -24,26 +24,44 @@ function init() {
       console.log(data);
       let place_regx = /([A-Z])\w+/g;
       let time_regx = /[0-9][0-9][:][0-9][0-9][" "][AP][M]/g;
-      let old__new_regx = /[" "]([0-9][0-9])[" "]/g;
+      let old_regx = /["{"][" "]([0-9][0-9])[" "]["}"]/g;
+      let new_regx = /["["][" "]([0-9][0-9])[" "]["]"]/g;
+      let remove_bra = /[{}]|[[]]/g;
       let place = [],
         time = [],
-        old__new_data = [];
+        old_data = [];
+      new_data = [];
       for (var i = 0; i < data.length; i++) {
         // console.log(data[i].match(place_rex));
         place.push(data[i].match(place_regx).slice(0, -1).join(" "));
         time.push(data[i].match(time_regx)[0]);
-        console.log(data[i].match(old__new_regx));
+        // console.log(data[i].match(old_regx));
+        console.log(data[i].match(new_regx));
 
-        if (data[i].match(old__new_regx) == null) {
-          old__new_data.push(["0"]);
+        if (data[i].match(old_regx) == null) {
+          old_data.push("-");
         } else {
-          old__new_data.push(data[i].match(old__new_regx));
+          // console.log(data[i].match(old_regx)[0].replace(remove_bra, ""));
+          old_data.push(
+            data[i]
+              .match(old_regx)[0]
+              .replace(remove_bra, "")
+              .replaceAll(" ", "")
+          );
+        }
+        if (data[i].match(new_regx) == null) {
+          new_data.push(["-"]);
+        } else {
+          new_data.push(data[i].match(new_regx));
         }
       }
       console.log(place);
       console.log(time);
-      old__new_data.forEach((item) => {
-        console.log(item);
-      });
+      console.log(old_data);
+      console.log(new_data);
+
+      // old__new_data.forEach((item) => {
+      //   console.log(item);
+      // });
     });
 }
