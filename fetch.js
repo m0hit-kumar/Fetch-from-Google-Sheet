@@ -24,8 +24,8 @@ function init() {
       console.log(data);
       let place_regx = /([A-Z])\w+/g;
       let time_regx = /[0-9][0-9][:][0-9][0-9][" "][AP][M]/g;
-      let old_regx = /["{"][" "]([0-9][0-9])[" "]["}"]/g;
-      let new_regx = /["["][" "]([0-9][0-9])[" "]["]"]/g;
+      let old_regx = /["{"][" "][0-9][0-9][" "]["}"]/g;
+      let new_regx = /["["][" "][0-9][0-9][" "][\]]/g;
       let remove_bra = /[{}]|[[]]/g;
       let place = [],
         time = [],
@@ -50,9 +50,11 @@ function init() {
           );
         }
         if (data[i].match(new_regx) == null) {
-          new_data.push(["-"]);
+          new_data.push("-");
         } else {
-          new_data.push(data[i].match(new_regx));
+          new_data.push(
+            data[i].match(new_regx)[0].replace(/[[\]]/g, "").replaceAll(" ", "")
+          );
         }
       }
       console.log(place);
